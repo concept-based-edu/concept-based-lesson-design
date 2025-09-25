@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개념 중심 수업 설계 가이드 | 일반화 문장 만들기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 30px 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e2e8f0;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin: 25px 0 15px;
+            font-size: 1.3rem;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border-left: 4px solid var(--secondary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .principle-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
+        }
+
+        .principle-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .step-container {
+            position: relative;
+            margin: 30px 0;
+            padding-left: 40px;
+        }
+
+        .step-container::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 35px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+
+        .step-item {
+            position: relative;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .step-item::before {
+            content: attr(data-step);
+            position: absolute;
+            left: -30px;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px dashed var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .interactive-tool {
+            background: linear-gradient(135deg, #f0f9ff, #fdf4ff);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #e0e7ff;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .result-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid var(--success);
+            display: none;
+        }
+
+        .result-display.show {
+            display: block;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .checklist {
+            background: #f0fdf4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .section { padding: 20px; }
+            .principle-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 개념 중심 수업 설계 가이드</h1>
+            <p class="subtitle">강력한 일반화 문장 만들기 실전 가이드</p>
+            <p style="margin-top: 10px; color: #64748b;">대구감천초등학교 수석교사 여한기</p>
+        </header>
+
+        <nav class="navigation">
+            <button class="nav-btn active" onclick="showSection('intro')">도입</button>
+            <button class="nav-btn" onclick="showSection('concepts')">개념 이해</button>
+            <button class="nav-btn" onclick="showSection('principles')">5가지 원칙</button>
+            <button class="nav-btn" onclick="showSection('steps')">단계별 전략</button>
+            <button class="nav-btn" onclick="showSection('examples')">교과별 예시</button>
+            <button class="nav-btn" onclick="showSection('tool')">실습 도구</button>
+            <button class="nav-btn" onclick="showSection('project')">프로젝트 예시</button>
+        </nav>
+
+        <!-- 도입 섹션 -->
+        <section id="intro" class="section active">
+            <h2>📚 왜 일반화 문장이 중요한가?</h2>
+            
+            <div class="concept-card">
+                <h3>일반화 문장이란?</h3>
+                <p>학생이 수업을 통해 도달해야 할 <strong>이해의 지점</strong>을 서술한 문장입니다.</p>
+                <ul style="margin-top: 15px; padding-left: 20px;">
+                    <li>단순한 지식이 아닌, 개념 간 관계에 대한 통찰</li>
+                    <li>전이가 가능한 사고력을 유도</li>
+                    <li>영속적 이해(Enduring Understanding)를 구체적으로 표현</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>💡 핵심 포인트</h3>
+                <p>일반화 문장은 수업의 <span class="badge">목표</span> <span class="badge">평가 기준</span> <span class="badge">중심축</span>이 됩니다.</p>
+            </div>
+
+            <h3>주요 교육 이론과의 관계</h3>
+            <div class="principle-grid">
+                <div class="principle-card">
+                    <div class="principle-number">C</div>
+                    <h4>CBC (Erickson)</h4>
+                    <p>개념 간 관계 탐구를 통한 사고 확장</p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-number">U</div>
+                    <h4>UbD (Wiggins & McTighe)</h4>
+                    <p>영속적 이해를 수업의 궁극적 목표로</p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-number">I</div>
+                    <h4>IB 교육</h4>
+                    <p>7가지 Key Concepts로 탐구 연결</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 개념 이해 섹션 -->
+        <section id="concepts" class="section">
+            <h2>🔍 개념 수준 이해하기</h2>
+            
+            <div class="step-container">
+                <div class="step-item" data-step="1">
+                    <h3>매크로 개념 (Macro Concept)</h3>
+                    <p><strong>정의:</strong> 시대나 분야를 넘어 보편적으로 적용되는 "빅 아이디어"</p>
+                    <div class="example-box" style="margin-top: 15px;">
+                        <strong>예시:</strong> 변화, 상호의존성, 시스템, 균형, 관점, 패턴, 갈등, 혁신, 권력, 정의, 문화
+                    </div>
+                </div>
+                
+                <div class="step-item" data-step="2">
+                    <h3>메소 개념 (Meso Concept)</h3>
+                    <p><strong>정의:</strong> 특정 교과나 주제 영역에서 중심이 되는 핵심 개념</p>
+                    <div class="example-box" style="margin-top: 15px;">
+                        <strong>예시:</strong> 
+                        <br>• 과학: 생태계, 에너지 보존
+                        <br>• 수학: 함수, 삼각법
+                        <br>• 역사: 혁명
+                    </div>
+                </div>
+                
+                <div class="step-item" data-step="3">
+                    <h3>마이크로 개념 (Micro Concept)</h3>
+                    <p><strong>정의:</strong> 특정 주제나 현상에 국한된 구체적 개념</p>
+                    <div class="example-box" style="margin-top: 15px;">
+                        <strong>예시:</strong> 
+                        <br>• 생태계 단원: 먹이사슬, 포식-피식 관계
+                        <br>• 역사: 프랑스 혁명
+                        <br>• 수학: 일차방정식
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5가지 원칙 섹션 -->
+        <section id="principles" class="section">
+            <h2>✨ 일반화 문장 작성 5가지 원칙</h2>
+            
+            <div class="principle-grid">
+                <div class="principle-card">
+                    <div class="principle-number">1</div>
+                    <h4>개념 간 관계 명확히</h4>
+                    <p><strong>질문:</strong> "어떻게 연결되는가?"</p>
+                    <p style="margin-top: 10px;">최소 2개 개념을 능동형 동사로 연결</p>
+                    <p style="color: var(--danger); margin-top: 10px;">⚠️ "~와 관련 있다" 등은 피하기</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="principle-number">2</div>
+                    <h4>인과 관계 포함하기</h4>
+                    <p><strong>질문:</strong> "왜?", "그래서?"</p>
+                    <p style="margin-top: 10px;">원인-결과 또는 작용-반작용 구조</p>
+                    <p style="color: var(--danger); margin-top: 10px;">⚠️ 원인과 결과 불명확한 진술 피하기</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="principle-number">3</div>
+                    <h4>시간 초월적 표현</h4>
+                    <p><strong>질문:</strong> "시간이 지나면?", "변화의 흐름은?"</p>
+                    <p style="margin-top: 10px;">시간의 흐름이나 지속적 영향 명시</p>
+                    <p style="color: var(--danger); margin-top: 10px;">⚠️ 항상, 언제나 등 단정적 표현 피하기</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="principle-number">4</div>
+                    <h4>전이 가능성 확보</h4>
+                    <p><strong>질문:</strong> "다른 맥락에서도?"</p>
+                    <p style="margin-top: 10px;">다양한 맥락에서 재적용 가능한 구조</p>
+                    <p style="color: var(--danger); margin-top: 10px;">⚠️ 특정 사례에만 적용되면 일반화 아님</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="principle-number">5</div>
+                    <h4>예외 최소화 표현</h4>
+                    <p><strong>질문:</strong> "대부분?", "일반적으로?"</p>
+                    <p style="margin-top: 10px;">일반적 경향을 포괄하면서도 정확하게</p>
+                    <p style="color: var(--danger); margin-top: 10px;">⚠️ "모든", "항상" 등 단정 표현 피하기</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 단계별 전략 섹션 -->
+        <section id="steps" class="section">
+            <h2>📋 일반화 문장 작성 단계별 전략</h2>
+            
+            <div class="step-container">
+                <div class="step-item" data-step="1">
+                    <h3>STEP 1: 개념 추출</h3>
+                    <p>성취기준에서 주요 개념 파악하기</p>
+                    <div class="example-box">
+                        <strong>예:</strong> 도덕 - 책임, 약속, 신뢰 / 과학 '소리' 단원 - 진동, 매질, 전달
+                    </div>
+                </div>
+                
+                <div class="step-item" data-step="2">
+                    <h3>STEP 2: 개념 간 관계 탐색</h3>
+                    <p>선정된 개념들이 어떻게 연관되는지 생각하기</p>
+                    <div class="example-box">
+                        <strong>예:</strong> [약속] → [규칙 준수] → [신뢰 형성] → [책임감 강화]
+                    </div>
+                </div>
+                
+                <div class="step-item" data-step="3">
+                    <h3>STEP 3: 개념 질문 활용</h3>
+                    <p>"어떻게?", "왜?", "그래서?" 같은 탐구적 질문 활용</p>
+                    <div class="example-box">
+                        <strong>예:</strong> "왜 약속이 신뢰를 만들어내는가?"
+                    </div>
+                </div>
+                
+                <div class="step-item" data-step="4">
+                    <h3>STEP 4: 일반화 문장 초안 작성 → 점진적 개선</h3>
+                    <p>발견한 개념 관계를 간결한 명제로 표현</p>
+                    <div class="example-box">
+                        ❌ "약속은 신뢰를 만든다." (약한 일반화)<br>
+                        ✅ "약속을 지키는 것은 규칙을 존중하는 태도를 형성하며, 이는 신뢰와 책임을 강화한다."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 교과별 예시 섹션 -->
+        <section id="examples" class="section">
+            <h2>📖 교과별 일반화 문장 예시</h2>
+            
+            <div class="concept-card">
+                <h3>사회과 - 6학년</h3>
+                <p><strong>성취기준:</strong> [6사08-01] 민주주의에서 선거의 의미와 역할을 파악</p>
+                <p><strong>개념적 렌즈:</strong> 시스템</p>
+                <div class="example-box">
+                    <strong>일반화 문장 예시:</strong><br>
+                    • 민주주의는 선거를 통해 시민의 주권 행사를 제도화한다.<br>
+                    • 선거는 시민의 주권 행사를 가능하게 한다.<br>
+                    • 시민의 선거 참여는 책임 있는 태도를 강화한다.
+                </div>
+            </div>
+            
+            <div class="concept-card">
+                <h3>과학 - 4학년</h3>
+                <p><strong>성취기준:</strong> [4과02-02] 다양한 환경에 서식하는 동물 조사</p>
+                <p><strong>개념적 렌즈:</strong> 형태와 기능</p>
+                <div class="example-box">
+                    <strong>일반화 문장 예시:</strong><br>
+                    • 동물이 사는 환경은 그 생김새와 생활 방식의 특징을 형성한다.<br>
+                    • 서로 다른 환경의 동물들은 환경 조건에 따라 달라지는 특징을 보인다.<br>
+                    • 동물은 사는 곳에 따라 생김새와 생활 모습이 다르게 나타난다.
+                </div>
+            </div>
+            
+            <div class="concept-card">
+                <h3>도덕 - 3학년</h3>
+                <p><strong>성취기준:</strong> [4도02-02] 친구 사이의 배려에 대한 올바른 이해</p>
+                <p><strong>개념적 렌즈:</strong> 관계와 책임</p>
+                <div class="example-box">
+                    <strong>일반화 문장 예시:</strong><br>
+                    • 배려는 친구를 존중하게 하고, 존중은 좋은 관계를 형성한다.<br>
+                    • 배려 행동은 친구와의 도덕적 관계를 형성하고 책임 있는 태도를 기른다.<br>
+                    • 배려와 존중은 친구뿐만 아니라 다른 관계에서도 필요하다.
+                </div>
+            </div>
+        </section>
+
+        <!-- 실습 도구 섹션 -->
+        <section id="tool" class="section">
+            <h2>🛠️ 일반화 문장 만들기 실습 도구</h2>
+            
+            <div class="interactive-tool">
+                <h3>나만의 일반화 문장 만들기</h3>
+                
+                <div class="input-group">
+                    <label>교과목:</label>
+                    <select id="subject">
+                        <option value="">선택하세요</option>
+                        <option value="국어">국어</option>
+                        <option value="수학">수학</option>
+                        <option value="사회">사회</option>
+                        <option value="과학">과학</option>
+                        <option value="도덕">도덕</option>
+                        <option value="미술">미술</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>주요 개념 1:</label>
+                    <input type="text" id="concept1" placeholder="예: 민주주의">
+                </div>
+                
+                <div class="input-group">
+                    <label>주요 개념 2:</label>
+                    <input type="text" id="concept2" placeholder="예: 선거">
+                </div>
+                
+                <div class="input-group">
+                    <label>개념적 렌즈 (선택):</label>
+                    <select id="lens">
+                        <option value="">선택하세요</option>
+                        <option value="시스템">시스템</option>
+                        <option value="변화">변화</option>
+                        <option value="관계">관계</option>
+                        <option value="패턴">패턴</option>
+                        <option value="책임">책임</option>
+                        <option value="형태와 기능">형태와 기능</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>관계 서술어:</label>
+                    <input type="text" id="verb" placeholder="예: 제도화한다, 가능하게 한다, 강화한다">
+                </div>
+                
+                <div class="input-group">
+                    <label>일반화 문장 작성:</label>
+                    <textarea id="generalization" placeholder="두 개념 간의 관계를 설명하는 일반화 문장을 작성해보세요."></textarea>
+                </div>
+                
+                <button class="btn" onclick="generateSuggestion()">문장 생성 도우미</button>
+                <button class="btn" onclick="checkGeneralization()" style="margin-left: 10px;">체크리스트 확인</button>
+                
+                <div id="result" class="result-display">
+                    <h4>생성된 일반화 문장:</h4>
+                    <p id="generated-text"></p>
+                </div>
+                
+                <div id="checklist-result" class="checklist" style="display: none;">
+                    <h4>✅ 체크리스트</h4>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check1">
+                        <label for="check1">개념 간 관계가 명확한가?</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check2">
+                        <label for="check2">인과 관계가 드러나는가?</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check3">
+                        <label for="check3">전이 가능성이 있는가?</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check4">
+                        <label for="check4">특정 사례에만 국한되지 않는가?</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check5">
+                        <label for="check5">모호하거나 너무 단순하지 않은가?</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 프로젝트 예시 섹션 -->
+        <section id="project" class="section">
+            <h2>🎨 프로젝트 학습 예시</h2>
+            
+            <div class="concept-card">
+                <h3>단원명: 나의 가치, 우리의 이야기를 담은 작가 되기 프로젝트</h3>
+                <p><strong>학년:</strong> 6학년 2학기 | <strong>차시:</strong> 12차시 (국어 4, 도덕 4, 미술 4)</p>
+                
+                <div style="margin-top: 20px;">
+                    <h4>핵심 아이디어 (일반화 문장)</h4>
+                    <div class="example-box">
+                        <strong>영역 수준:</strong> 사람은 저마다 다른 관점을 지닌 존재이며, 이러한 차이를 이해하고 다양성을 존중할 때 건강한 공동체가 만들어진다.<br><br>
+                        <strong>단원 수준:</strong> 다른 사람의 관점을 이해하고 공감하는 이야기를 만들 때, 다양성의 가치를 전하고 편견을 줄일 수 있다.
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>수행과제: 마음을 움직이는 이야기 만들기</h4>
+                    <div class="principle-grid">
+                        <div class="principle-card">
+                            <strong>목표(G):</strong> 다양성의 가치를 전하고 편견을 줄이기 위한 메시지를 복합양식 매체로 창작
+                        </div>
+                        <div class="principle-card">
+                            <strong>역할(R):</strong> 사람들의 생각과 마음을 움직이는 이야기를 만드는 작가
+                        </div>
+                        <div class="principle-card">
+                            <strong>청중(A):</strong> 또래 친구들, 저학년 학생들, 학교 구성원
+                        </div>
+                        <div class="principle-card">
+                            <strong>상황(S):</strong> 우리 주변에는 여전히 편견 때문에 상처받는 사람들이 있어요
+                        </div>
+                        <div class="principle-card">
+                            <strong>결과물(P):</strong> 편견을 주제로 한 공감 동화책 (디지털 또는 종이 그림책)
+                        </div>
+                        <div class="principle-card">
+                            <strong>준거(S):</strong> 다양성과 편견 주제 명확성, 창의적 통합, 공감과 존중의 태도
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>© 2024 개념 중심 수업 설계 가이드 | 대구감천초등학교</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">이 자료는 교사 연수를 위해 제작되었습니다.</p>
+        </footer>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // 모든 섹션 숨기기
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // 선택된 섹션 보이기
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 네비게이션 버튼 활성화 상태 변경
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function generateSuggestion() {
+            const concept1 = document.getElementById('concept1').value;
+            const concept2 = document.getElementById('concept2').value;
+            const verb = document.getElementById('verb').value;
+            const lens = document.getElementById('lens').value;
+            
+            if (!concept1 || !concept2) {
+                alert('주요 개념을 입력해주세요.');
+                return;
+            }
+            
+            let suggestion = '';
+            if (verb) {
+                suggestion = `${concept1}은(는) ${concept2}을(를) ${verb}.`;
+            } else {
+                const verbs = ['강화한다', '촉진한다', '가능하게 한다', '형성한다', '발전시킨다'];
+                const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
+                suggestion = `${concept1}은(는) ${concept2}을(를) ${randomVerb}.`;
+            }
+            
+            if (lens) {
+                suggestion += ` (개념적 렌즈: ${lens})`;
+            }
+            
+            document.getElementById('generated-text').textContent = suggestion;
+            document.getElementById('result').classList.add('show');
+            document.getElementById('generalization').value = suggestion;
+        }
+
+        function checkGeneralization() {
+            const generalization = document.getElementById('generalization').value;
+            
+            if (!generalization) {
+                alert('일반화 문장을 작성해주세요.');
+                return;
+            }
+            
+            document.getElementById('checklist-result').style.display = 'block';
+            
+            // 체크박스 초기화
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+        }
+
+        // 체크박스 클릭 시 피드백
+        document.querySelectorAll('.checklist-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                
+                // 모든 체크박스가 체크되었는지 확인
+                const allChecked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked').length === 5;
+                if (allChecked) {
+                    setTimeout(() => {
+                        alert('훌륭합니다! 모든 기준을 충족하는 일반화 문장입니다. 🎉');
+                    }, 300);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
